@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface LFGraphicCodeView : UIView
-- (instancetype)initWithFrame:(CGRect)frame idCodeStr:(NSString *)codeStr;
+- (instancetype)initWithFrame:(CGRect)frame idCodeStr:(NSString *)codeStr isRandom:(BOOL)isRandom;
 @property (nonatomic,copy) void (^changeCodeStrDidClick)();
+@property (nonatomic,copy) void (^changeCodeRandom)(NSString *codeStr);
+
 @property (nonatomic,copy) NSString *idCodeStr;
 @end

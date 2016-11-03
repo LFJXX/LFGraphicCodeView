@@ -10,14 +10,22 @@
 
 @interface LFGraphicCodeView ()
 
+@property (nonatomic,assign) BOOL isRandom;
+
 @end
 
 @implementation LFGraphicCodeView
 
-- (instancetype)initWithFrame:(CGRect)frame idCodeStr:(NSString *)codeStr{
+- (instancetype)initWithFrame:(CGRect)frame idCodeStr:(NSString *)codeStr isRandom:(BOOL)isRandom{
     if (self = [super initWithFrame:frame]) {
+        self.isRandom = isRandom;
+        if (isRandom) {
+            
+            self.idCodeStr = [self getRandomString];
+        }else{
+            self.idCodeStr = codeStr;
         
-        self.idCodeStr = codeStr;
+        }
         self.backgroundColor = [self getRandomColorWithAlpha:0.5];
       
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeCodeStr)];
@@ -29,10 +37,23 @@
 
 - (void)changeCodeStr{
 
-    if (self.changeCodeStrDidClick) {
-        self.changeCodeStrDidClick();
+    if (self.isRandom) {
+        
+        self.idCodeStr = [self getRandomString];
+        [self  setNeedsDisplay];
+        
+        if (self.changeCodeRandom) {
+            self.changeCodeRandom(self.idCodeStr);
+        }
+    }else{
+    
+        if (self.changeCodeStrDidClick) {
+            self.changeCodeStrDidClick();
+        }
     }
 }
+
+
 
 - (void)drawRect:(CGRect)rect {
 
@@ -79,6 +100,8 @@
     
 }
 
+
+// 获取随机颜色
 - (UIColor *)getRandomColorWithAlpha:(CGFloat)alpha{
 
     float red = arc4random() % 100 /100.0;
@@ -87,6 +110,25 @@
     
     UIColor *color = [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
     return color;
+}
+
+
+// 获取随机四位数
+- (NSString *)getRandomString{
+    NSArray *array = [[NSArray alloc] initWithObjects:@"0",@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@"A",@"B",@"C",@"D",@"E",@"F",@"G",@"H",@"I",@"J",@"K",@"L",@"M",@"N",@"O",@"P",@"Q",@"R",@"S",@"T",@"U",@"V",@"W",@"X",@"Y",@"Z",@"a",@"b",@"c",@"d",@"e",@"f",@"g",@"h",@"i",@"j",@"k",@"l",@"m",@"n",@"o",@"p",@"q",@"r",@"s",@"t",@"u",@"v",@"w",@"x",@"y",@"z",nil];
+    
+    NSMutableString *getStr = [[NSMutableString alloc] initWithCapacity:5];
+    
+    NSMutableString *codeStr = [[NSMutableString alloc] initWithCapacity:6];
+    for(NSInteger i = 0; i < 4; i++)
+    {
+        NSInteger index = arc4random() % (array.count - 1);
+        getStr = [array objectAtIndex:index];
+        codeStr = (NSMutableString *)[codeStr stringByAppendingString:getStr];
+    }
+    
+    return [codeStr copy];
+    
 }
 
 

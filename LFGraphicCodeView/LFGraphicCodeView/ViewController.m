@@ -28,9 +28,11 @@
     self.codeStr = [self getRandomString];
     
     NSLog(@"++++++++++%@",self.codeStr);
-    self.codeView = [[LFGraphicCodeView alloc] initWithFrame:CGRectMake(100, 50, 80, 35) idCodeStr:self.codeStr];
+    self.codeView = [[LFGraphicCodeView alloc] initWithFrame:CGRectMake(100, 50, 80, 35) idCodeStr:self.codeStr isRandom:YES];
     [self.view addSubview:self.codeView];
     
+    
+    // 自己传输
     __weak ViewController *weakSelf = self;
     self.codeView.changeCodeStrDidClick = ^{
         weakSelf.codeStr = [weakSelf getRandomString];
@@ -38,6 +40,11 @@
         [weakSelf.codeView setNeedsDisplay];
         NSLog(@"=======%@",weakSelf.codeStr);
         
+    };
+    
+    self.codeView.changeCodeRandom = ^(NSString *codeStr){
+        weakSelf.codeStr = codeStr;
+       NSLog(@"random =======%@",weakSelf.codeStr);
     };
     
     
